@@ -113,6 +113,13 @@ button.danger{background:rgba(251,113,133,.14);border-color:var(--danger);color:
 .badge-new{display:inline-block;margin-left:8px;padding:2px 10px;border-radius:99px;background:var(--grad);color:#fff;font-size:.75rem;font-weight:800}
 .rec.fresh{border-color:var(--green);box-shadow:0 0 0 2px rgba(74,222,128,.35),var(--shadow)}
 .bar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+
+.pmtabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.pmtabs button.on{background:var(--grad);color:#07122b;font-weight:800}
+.pmrow{margin:12px 0}.pmrow label{display:block;margin-bottom:4px}.pmrow small{display:block;margin-top:3px}
+.pmchk{display:flex;flex-wrap:wrap;gap:6px 14px}.pmchk label{display:inline-flex;gap:6px;align-items:center;margin:0}
+.pmmsg{margin:12px 0;padding:10px 12px;border-radius:12px;border:1px solid var(--border)}.pmmsg.bad{color:#fca5a5;border-color:#7f1d1d}.pmmsg.good{color:var(--green)}
+.pmmsg ul{margin:6px 0 0;padding-left:20px}
+#pmBox summary{cursor:pointer;font-size:1.1rem}
 </style>
 </head>
 <body>
@@ -143,10 +150,239 @@ button.danger{background:rgba(251,113,133,.14);border-color:var(--danger);color:
 </div></div>
 <div id="sideBox"></div>
 <div id="recList"></div>
+
+<details class="panel" id="pmBox">
+<summary><b>📦 จัดการสินค้า</b> <span class="muted" style="font-size:.9rem">เพิ่มสินค้าใหม่ · แก้ราคา · ซ่อนสินค้า</span></summary>
+<p class="muted">สินค้าที่เพิ่มจะเข้าไปอยู่ในระบบแนะนำสเปกทันที (ลูกค้าเห็นเมื่อเปิดหน้าเว็บใหม่ ภายในประมาณ 10 นาที) ระบบตรวจข้อมูลให้ก่อนบันทึก ถ้าใส่ค่าที่ระบบไม่รู้จักจะไม่ยอมบันทึก</p>
+<div class="pmtabs"><button data-pm-tab="pmAdd">➕ เพิ่มสินค้าใหม่</button><button data-pm-tab="pmEdit">✏️ แก้ราคา/ซ่อนสินค้าเดิม</button><button data-pm-tab="pmListWrap">📋 รายการที่ตั้งไว้</button></div>
+
+<div id="pmAdd">
+ <div class="pmrow"><label for="pmCat">หมวดสินค้า</label><select id="pmCat"></select></div>
+ <div class="pmrow"><label for="pmName">ชื่อสินค้า (ต้องไม่ซ้ำกับที่มีอยู่)</label><input id="pmName" type="text" maxlength="160" placeholder="เช่น GeForce RTX 4070 Ti SUPER 16GB"></div>
+ <div class="pmrow"><label for="pmPrice">ราคา (บาท)</label><input id="pmPrice" type="number" inputmode="numeric"></div>
+ <div class="pmrow" id="pmCondRow"><label for="pmCond">สภาพสินค้า</label><select id="pmCond"><option value="new">มือหนึ่ง</option><option value="u">มือสอง</option></select></div>
+ <div class="pmrow"><label for="pmBrand">ยี่ห้อ <span class="muted">(ไม่บังคับ)</span></label><input id="pmBrand" type="text" maxlength="40"></div>
+ <h3>ข้อมูลทางเทคนิค</h3>
+ <div id="pmFields"></div>
+ <h3>ตรวจราคาที่ร้านมาแล้ว? <span class="muted" style="font-size:.85rem">(ไม่บังคับ ถ้ากรอก เว็บจะขึ้นป้าย "ตรวจที่ร้าน" พร้อมลิงก์หน้าสินค้า)</span></h3>
+ <div class="pmrow"><label for="pmShop">ชื่อร้าน</label><input id="pmShop" type="text" maxlength="30" placeholder="เช่น JIB, Advice"></div>
+ <div class="pmrow"><label for="pmUrl">ลิงก์หน้าสินค้า (ขึ้นต้นด้วย https://)</label><input id="pmUrl" type="text" inputmode="url"></div>
+ <div class="pmrow"><label for="pmDate">วันที่ตรวจราคา</label><input id="pmDate" type="date"></div>
+ <button class="primary big" id="pmSave">บันทึกสินค้า</button>
+ <div id="pmMsg" class="pmmsg" role="alert"></div>
+</div>
+
+<div id="pmEdit" class="hidden">
+ <div class="pmrow"><label for="pmItem">เลือกสินค้าเดิมในระบบ</label><select id="pmItem"></select></div>
+ <div class="pmrow"><label for="pmNewPrice">ราคาใหม่ (บาท)</label><input id="pmNewPrice" type="number" inputmode="numeric"></div>
+ <div class="pmrow"><label for="pmEShop">ตรวจที่ร้าน <span class="muted">(ไม่บังคับ)</span></label><input id="pmEShop" type="text" maxlength="30" placeholder="เช่น JIB"></div>
+ <div class="pmrow"><label for="pmEUrl">ลิงก์หน้าสินค้า <span class="muted">(ไม่บังคับ)</span></label><input id="pmEUrl" type="text" inputmode="url"></div>
+ <div class="pmrow"><label for="pmEDate">วันที่ตรวจราคา</label><input id="pmEDate" type="date"></div>
+ <div class="pmrow"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="pmHide"> ซ่อนสินค้านี้ (ระบบจะไม่แนะนำอีก)</label></div>
+ <button class="primary big" id="pmESave">บันทึก</button>
+ <div id="pmMsg2" class="pmmsg" role="alert"></div>
+</div>
+
+<div id="pmListWrap" class="hidden"><div id="pmList"></div></div>
+</details>
 </section>
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"><b id="toastIc">🔔</b><span id="toastTx"></span></div>
 
+<script>
+const BUILTIN=[["cpu","AMD Ryzen 5 5600",4500],["cpu","AMD Ryzen 5 5600G",4590],["cpu","AMD Ryzen 5 7500F",6500],["cpu","AMD Ryzen 5 7600",8900],["cpu","AMD Ryzen 7 7700",12500],["cpu","AMD Ryzen 7 9800X3D",20000],["cpu","AMD Ryzen 9 9900X3D",22000],["cpu","AMD Ryzen 9 9950X3D2",56000],["cpu","Intel Core i3-12100F",3400],["cpu","Intel Core i5-12400",6200],["cpu","Intel Core i5-14400F",9200],["cpu","AMD Ryzen 5 3600 (มือสอง)",2200],["mb","ASRock B450M",2700],["mb","MSI B550M",3800],["mb","Gigabyte B650M",5200],["mb","ASUS B650 ATX",6800],["mb","ASUS X870 ATX",9500],["mb","ASUS X870E ATX",12000],["mb","ASRock H610M",2900],["mb","MSI B660M",4000],["mb","Gigabyte B760M",5000],["mb","ASUS Z790 ATX",8500],["ram","DDR4 16GB 3200 (8GB x 2)",4700],["ram","DDR4 32GB 3200 (16GB x 2)",10500],["ram","Kingston Fury Beast DDR5 5600 16GB (1x16)",9590],["ram","DDR5 32GB 5600 (16GB x 2)",17900],["ram","DDR5 64GB 5600 (32GB x 2)",37000],["ram","DDR4 16GB 3200 (มือสอง)",3000],["gpu","ไม่ใช้การ์ดจอแยก (กราฟิกในซีพียู)",0],["gpu","GeForce RTX 3050 6GB",7000],["gpu","Radeon RX 7600 8GB",11000],["gpu","GeForce RTX 4060 8GB",13500],["gpu","GeForce RTX 4060 Ti 8GB",18500],["gpu","Radeon RX 7800 XT 16GB",23500],["gpu","GeForce RTX 4070 SUPER 12GB",28000],["gpu","GeForce RTX 5080 16GB",67000],["gpu","GeForce RTX 5090 32GB",139000],["gpu","GeForce GTX 1660 SUPER 6GB (มือสอง)",3500],["gpu","Radeon RX 580 8GB (มือสอง)",2200],["gpu","GeForce RTX 3060 12GB (มือสอง)",6500],["ssd","NVMe SSD 500GB",3000],["ssd","Kingston NV3 NVMe SSD 1TB",5190],["ssd","NVMe SSD 2TB",10500],["ssd","HDD 2TB 7200rpm",2000],["psu","PSU 450W",1200],["psu","PSU 550W",1600],["psu","PSU 650W",2200],["psu","PSU 750W",3000],["psu","PSU 850W",3900],["psu","PSU 1200W",7000],["psu","PSU 1600W",10000],["cs","เคส Micro-ATX ขนาดเล็ก",1100],["cs","เคส ATX มาตรฐาน",2000],["cs","เคส ATX ช่องลมใหญ่",3200],["cl","พัดลมซีพียูที่แถมมากับกล่อง",0],["cl","พัดลมระบายความร้อน Tower",1200],["cl","ชุดน้ำ AIO 240mm",2600],["cl","DeepCool LM360 ชุดน้ำ AIO 360mm",3690],["pc","JIB Maru Ryzen 5 5600 / RTX 3050 6GB / 16GB DDR4 / 500GB",24640],["pc","JIB Maru Ryzen 5 5600 / RTX 5050 8GB / 16GB DDR4 / 500GB",27140],["pc","JIB Zarukon Ryzen 7 9800X3D / RTX 5080 / 32GB DDR5 / 1TB",129650],["pc","NVIDIA RTX 5090 FE Set Ryzen 9 9900X3D / 64GB / 2TB",233290],["pc","NVIDIA RTX 5090 FE Set Ryzen 9 9950X3D2 / 64GB / 2TB",270490],["nb","ASUS Vivobook Go 15 M1504FA-NJ516W",12990],["nb","ASUS Vivobook Go 15 M1504FA-NJ501WS",15990],["nb","ASUS Vivobook 16 V3607VU-RP596W",30990],["nb","ASUS Vivobook 16 V3607VU-RP745W",34990],["nb","ASUS TUF Gaming F16 FX608JPR-QT201W",59990],["nb","Acer Aspire Go 15 (Core i3 / 8GB / 256GB)",8990],["nb","Lenovo IdeaPad Slim 3 (Ryzen 5 / 16GB / 512GB)",17990],["nb","ASUS Vivobook 14 OLED (Core 5 / 16GB / 512GB)",24990],["nb","Lenovo LOQ 15 (Core i5 / RTX 4060 / 16GB / 512GB)",42990],["nb","MSI Katana 15 (Core i7 / RTX 4060 / 16GB / 1TB)",49990],["nb","Lenovo Legion 5 (Ryzen 7 / RTX 5060 / 32GB / 1TB)",57990],["nb","ASUS Vivobook Pro 16 OLED (Ryzen 9 / RTX 4060 / 32GB / 1TB)",79990],["nb","ASUS ROG Strix G16 (Core i9 / RTX 5070 Ti / 32GB / 1TB)",99990],["nb","ASUS ROG Zephyrus G16 (Core Ultra 9 / RTX 5080 / 32GB / 2TB)",139990],["nb","MSI Raider 18 HX (Core Ultra 9 / RTX 5080 / 64GB / 2TB)",169990],["nb","MSI Titan 18 HX (Core Ultra 9 / RTX 5090 / 64GB / 4TB)",239990],["cpu","Intel Core i3-12100 (มีกราฟิกในตัว)",4000],["cpu","Intel Pentium Gold G7400",2800],["ram","DDR4 8GB 3200 (8GB x 1)",2200],["ram","DDR4 8GB (มือสอง)",1500],["ssd","NVMe SSD 256GB",1500],["psu","PSU 350W",900],["nb","Lenovo ThinkPad T480 (Core i5 / 8GB / 256GB) มือสอง",6900],["nb","Acer Nitro 5 (Core i5 / GTX 1650 / 8GB / 512GB) มือสอง",12900],["nb","ASUS TUF Gaming F15 (Core i5 / RTX 3050 / 16GB / 512GB) มือสอง",17900],["cpu","AMD Ryzen 5 5500",3300],["cpu","AMD Ryzen 7 5700X",5900],["cpu","AMD Ryzen 7 5700X3D",7900],["cpu","AMD Ryzen 5 5600X (มือสอง)",3500],["cpu","AMD Ryzen 5 9600X",8900],["cpu","AMD Ryzen 7 9700X",12900],["cpu","AMD Ryzen 7 7800X3D",16500],["cpu","AMD Ryzen 9 9900X",15900],["cpu","Intel Core i5-13400F",6900],["cpu","Intel Core i7-12700F",8700],["cpu","Intel Core i5-14600KF",10900],["cpu","Intel Core i7-14700KF",14500],["cpu","Intel Core i9-14900K",19900],["mb","MSI B550 Tomahawk ATX",5400],["mb","MSI B760M DDR4",4600],["mb","MSI B850M",6900],["mb","ASUS Z790 DDR4 ATX",7600],["ram","DDR4 64GB 3200 (32GB x 2)",20000],["gpu","Radeon RX 6600 8GB",6500],["gpu","GeForce RTX 5050 8GB",9900],["gpu","GeForce RTX 5060 8GB",12900],["gpu","GeForce RTX 5060 Ti 16GB",17900],["gpu","Radeon RX 9060 XT 16GB",15900],["gpu","GeForce RTX 5070 12GB",21900],["gpu","Radeon RX 9070 16GB",24500],["gpu","Radeon RX 9070 XT 16GB",27500],["gpu","GeForce RTX 5070 Ti 16GB",36500],["gpu","GeForce RTX 3060 Ti 8GB (มือสอง)",8500],["gpu","GeForce RTX 3070 8GB (มือสอง)",9500],["gpu","GeForce RTX 3080 10GB (มือสอง)",14000],["psu","PSU 1000W",5200],["cs","เคส mATX ช่องลมดี",1800],["cs","เคส ATX Mesh พัดลมหน้า",2800],["cs","เคส Full Tower ATX",5500],["cl","พัดลมระบายความร้อน Tower คู่",1800],["cl","ชุดน้ำ AIO 280mm",3200],["cl","ชุดน้ำ AIO 420mm",5500]];
+/* ===== ตรวจรายการสินค้าที่เพิ่มเองใน products.jsonl (1 บรรทัด = 1 สินค้า) ===== */
+const PV_SOCKETS=['AM4','AM5','LGA1700'],PV_GENS=['am4-3k','am4-5k','am5','i12','i14'],PV_MEM=['DDR4','DDR5'],PV_FORMS=['mATX','ATX'],PV_PU='gwpvxn';
+const PV_SPEC={
+  cpu:{s:['e',PV_SOCKETS],gen:['e',PV_GENS],w:['n',10,400],p:['n',1,300],ig:['b'],bx:['b'],ct:['i',0,3],bt:['i',1,3]},
+  mb:{s:['e',PV_SOCKETS],m:['e',PV_MEM],f:['e',PV_FORMS],t:['i',1,3],u:['a',PV_GENS,'opt']},
+  ram:{m:['e',PV_MEM],gb:['n',4,256]},
+  gpu:{w:['n',0,700],l:['n',0,450],p:['n',1,400],pc:['i',0,3]},
+  ssd:{gb:['n',120,16000],t:['e',['NVMe','HDD']]},
+  psu:{w:['n',200,2000],pc:['i',0,3]},
+  cs:{f:['a',PV_FORMS],l:['n',150,550],r:['n',0,480],ch:['n',100,230]},
+  cl:{t:['i',0,3],cw:['n',50,700],r:['n',0,480],h:['n',0,230]},
+  nb:{cpu:['s'],gpu:['s'],gt:['e',['ในตัว','แยก']],ram:['n',2,256],ssd:['s'],scr:['s'],p:['n',1,200]}
+};
+function pvCheck(o,names){
+  const e=[];
+  if(!o||typeof o!=='object'||Array.isArray(o))return['ไม่ใช่รูปแบบ JSON ที่ถูกต้อง'];
+  const isN=v=>typeof v==='number'&&isFinite(v);
+  if(!PV_SPEC[o.cat])e.push('cat ต้องเป็นหนึ่งใน '+Object.keys(PV_SPEC).join(', '));
+  if(typeof o.name!=='string'||o.name.trim().length<3||o.name.length>160)e.push('name ต้องเป็นข้อความยาว 3-160 ตัวอักษร');
+  else if(names&&names.has(o.name))e.push('ชื่อ "'+o.name+'" มีอยู่แล้ว');
+  if(!isN(o.price)||o.price<300||o.price>500000)e.push('price ต้องเป็นตัวเลข 300-500000');
+  if(o.cond!==undefined&&o.cond!=='new'&&!(o.cond==='u'&&['cpu','ram','gpu','nb'].includes(o.cat)))e.push('cond ต้องเป็น "new" (หรือ "u" เฉพาะ cpu, ram, gpu, nb)');
+  if(o.pu!==undefined&&!(typeof o.pu==='string'&&o.pu.length&&[...o.pu].every(c=>PV_PU.includes(c))))e.push('pu ต้องเป็นตัวอักษรจาก g w p v x n เท่านั้น');
+  if(o.cat==='nb'&&o.pu===undefined)e.push('โน้ตบุ๊กต้องมี pu (ใช้กับงานอะไร เช่น "wpn")');
+  if(o.url!==undefined&&!(typeof o.url==='string'&&/^https:\/\/\S+$/.test(o.url)))e.push('url ต้องขึ้นต้นด้วย https://');
+  const def=PV_SPEC[o.cat];
+  if(def){
+    const sp=o.spec;
+    if(!sp||typeof sp!=='object'||Array.isArray(sp))e.push('ต้องมี spec เป็น {...}');
+    else{
+      for(const k of Object.keys(sp))if(!def[k])e.push('spec มีช่อง "'+k+'" ที่ระบบไม่รู้จัก (พิมพ์ผิดหรือเปล่า)');
+      for(const [k,d] of Object.entries(def)){
+        const v=sp[k],t=d[0],opt=d[d.length-1]==='opt';
+        if(v===undefined){if(!opt)e.push('spec ขาดช่อง "'+k+'"');continue}
+        if(t==='n'&&!(isN(v)&&v>=d[1]&&v<=d[2]))e.push('spec.'+k+' ต้องเป็นตัวเลข '+d[1]+'-'+d[2]);
+        else if(t==='i'&&!(Number.isInteger(v)&&v>=d[1]&&v<=d[2]))e.push('spec.'+k+' ต้องเป็นจำนวนเต็ม '+d[1]+'-'+d[2]);
+        else if(t==='b'&&!(v===0||v===1))e.push('spec.'+k+' ต้องเป็น 0 หรือ 1');
+        else if(t==='e'&&!d[1].includes(v))e.push('spec.'+k+' ต้องเป็นหนึ่งใน '+d[1].join(', ')+' (ค่าใหม่ต้องให้ผู้พัฒนาแก้โค้ดก่อน)');
+        else if(t==='a'&&!(Array.isArray(v)&&v.length&&v.every(x=>d[1].includes(x))))e.push('spec.'+k+' ต้องเป็นรายการจาก '+d[1].join(', '));
+        else if(t==='s'&&!(typeof v==='string'&&v.length>0&&v.length<=120))e.push('spec.'+k+' ต้องเป็นข้อความ');
+      }
+    }
+  }
+  return e;
+}
+
+/* ===== ตัวจัดการสินค้า (หลังบ้าน): เพิ่มสินค้าใหม่ / แก้ราคา-ซ่อนสินค้าเดิม ===== */
+const PM_CATS={cpu:'ซีพียู',mb:'เมนบอร์ด',ram:'RAM',gpu:'การ์ดจอ',ssd:'SSD',psu:'PSU',cs:'เคส',cl:'ชุดระบายความร้อน',nb:'โน้ตบุ๊ก',pc:'คอมประกอบสำเร็จ'};
+const PM_B=[[0,'ไม่มี'],[1,'มี']];
+const PM_T3=[[1,'1 ระดับเริ่มต้น'],[2,'2 ระดับกลาง'],[3,'3 ระดับสูง']];
+const PM_F={
+ cpu:[
+  {k:'s',l:'ซ็อกเก็ต',t:'e',o:[['AM4','AM4'],['AM5','AM5'],['LGA1700','LGA1700 (Intel)']]},
+  {k:'gen',l:'ตระกูล (ใช้ตรวจความเข้ากันได้กับเมนบอร์ด)',t:'e',o:[['am4-3k','AMD AM4 Ryzen 3000'],['am4-5k','AMD AM4 Ryzen 5000'],['am5','AMD AM5 (Ryzen 7000/9000)'],['i12','Intel เจน 12'],['i14','Intel เจน 13-14']]},
+  {k:'w',l:'กำลังไฟสูงสุดโดยประมาณ (วัตต์)',t:'n',h:'เช่น Ryzen 5 5600 = 75, Ryzen 7 7700 = 90, Core i7-14700KF = 220'},
+  {k:'p',l:'คะแนนประสิทธิภาพ',t:'n',h:'เทียบกับรุ่นใกล้เคียง: Ryzen 5 5600 = 55, Ryzen 5 7600 = 70, Ryzen 7 7700 = 78, Ryzen 7 9800X3D = 100'},
+  {k:'ig',l:'มีกราฟิกในตัว',t:'b'},
+  {k:'bx',l:'มีพัดลมแถมในกล่อง',t:'b'},
+  {k:'ct',l:'ชุดระบายความร้อนที่ต้องใช้',t:'e',num:1,o:[[0,'0 พัดลมที่แถมพอ'],[1,'1 พัดลมทาวเวอร์'],[2,'2 ชุดน้ำ 240 หรือทาวเวอร์คู่'],[3,'3 ชุดน้ำ 360']]},
+  {k:'bt',l:'ระดับเมนบอร์ดขั้นต่ำ',t:'e',num:1,o:PM_T3}],
+ mb:[
+  {k:'s',l:'ซ็อกเก็ต',t:'e',o:[['AM4','AM4'],['AM5','AM5'],['LGA1700','LGA1700 (Intel)']]},
+  {k:'m',l:'ชนิด RAM ที่รองรับ',t:'e',o:[['DDR4','DDR4'],['DDR5','DDR5']]},
+  {k:'f',l:'ขนาดบอร์ด',t:'e',o:[['mATX','Micro-ATX'],['ATX','ATX']]},
+  {k:'t',l:'ระดับเมนบอร์ด',t:'e',num:1,o:PM_T3,h:'1 = รุ่นเริ่มต้น (A/H) · 2 = รุ่นกลาง (B) · 3 = รุ่นสูง (Z/X)'},
+  {k:'u',l:'ซีพียูตระกูลที่ต้องอัปเดต BIOS ก่อนใช้ (ถ้ามี)',t:'a',opt:1,o:[['am4-3k','AM4 Ryzen 3000'],['am4-5k','AM4 Ryzen 5000'],['am5','AM5'],['i12','Intel เจน 12'],['i14','Intel เจน 13-14']]}],
+ ram:[
+  {k:'m',l:'ชนิด',t:'e',o:[['DDR4','DDR4'],['DDR5','DDR5']]},
+  {k:'gb',l:'ความจุรวม (GB)',t:'n',h:'ถ้าเป็นแพ็กคู่ ให้นับรวม เช่น 2x16GB = 32'}],
+ gpu:[
+  {k:'w',l:'กำลังไฟของการ์ดจอ (วัตต์)',t:'n'},
+  {k:'l',l:'ความยาวการ์ด (มม.)',t:'n'},
+  {k:'p',l:'คะแนนประสิทธิภาพ',t:'n',h:'เทียบกับรุ่นใกล้เคียง: RTX 4060 = 46, RTX 5060 Ti = 63, RTX 4070 SUPER = 80, RTX 5070 Ti = 97, RTX 5080 = 115, RTX 5090 = 160'},
+  {k:'pc',l:'สายไฟที่ต้องต่อ',t:'e',num:1,o:[[0,'0 ไม่ต้องต่อไฟเพิ่ม'],[1,'1 สาย 8-pin เส้นเดียว'],[2,'2 สาย 8-pin สองเส้น'],[3,'3 สาย 16-pin (12V-2x6)']]}],
+ ssd:[
+  {k:'gb',l:'ความจุ (GB)',t:'n',h:'เช่น 500, 1000, 2000'},
+  {k:'t',l:'ชนิด',t:'e',o:[['NVMe','NVMe'],['HDD','HDD']]}],
+ psu:[
+  {k:'w',l:'กำลังไฟ (วัตต์)',t:'n'},
+  {k:'pc',l:'รองรับสายไฟการ์ดจอสูงสุด',t:'e',num:1,o:[[0,'0 ไม่มีสายการ์ดจอ'],[1,'1 สาย 8-pin เส้นเดียว'],[2,'2 สาย 8-pin สองเส้น'],[3,'3 สาย 16-pin (12V-2x6)']]}],
+ cs:[
+  {k:'f',l:'รองรับเมนบอร์ดขนาด',t:'a',o:[['mATX','Micro-ATX'],['ATX','ATX']]},
+  {k:'l',l:'ความยาวการ์ดจอสูงสุด (มม.)',t:'n'},
+  {k:'r',l:'หม้อน้ำสูงสุด (มม.)',t:'n',h:'0 = ไม่รองรับชุดน้ำ'},
+  {k:'ch',l:'ความสูงพัดลมซีพียูสูงสุด (มม.)',t:'n'}],
+ cl:[
+  {k:'t',l:'ระดับการระบายความร้อน',t:'e',num:1,o:[[0,'0 พัดลมธรรมดา'],[1,'1 พัดลมทาวเวอร์'],[2,'2 ชุดน้ำ 240 หรือทาวเวอร์คู่'],[3,'3 ชุดน้ำ 360']]},
+  {k:'cw',l:'ระบายความร้อนได้ (วัตต์)',t:'n'},
+  {k:'r',l:'ขนาดหม้อน้ำ (มม.)',t:'n',h:'0 = พัดลมอากาศ'},
+  {k:'h',l:'ความสูงของพัดลม (มม.)',t:'n',h:'0 = ชุดน้ำ'}],
+ nb:[
+  {k:'cpu',l:'ซีพียู',t:'s'},{k:'gpu',l:'การ์ดจอ',t:'s'},
+  {k:'gt',l:'ชนิดการ์ดจอ',t:'e',o:[['ในตัว','ในตัว'],['แยก','แยก']]},
+  {k:'ram',l:'RAM (GB)',t:'n'},{k:'ssd',l:'ความจุ SSD (ข้อความ เช่น 512GB)',t:'s'},{k:'scr',l:'หน้าจอ (ข้อความ)',t:'s'},
+  {k:'p',l:'คะแนนประสิทธิภาพทั้งเครื่อง',t:'n',h:'เทียบกับรุ่นใกล้เคียง: โน้ตบุ๊กออฟฟิศ ≈ 18 · RTX 3050 ≈ 38 · RTX 4060 ≈ 62'}]
+};
+const PM_PU=[['g','เกม'],['w','ทำงานทั่วไป/เรียน'],['p','เขียนโปรแกรม'],['v','ตัดต่อวิดีโอ'],['x','กราฟิก 3D'],['n','ใช้งานทั่วไป']];
+const PM_USED=['cpu','ram','gpu','nb'];
+const pmEsc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pmId=(p,name)=>p+Array.from(new TextEncoder().encode(String(name))).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,200);
+const pmToday=()=>new Date(Date.now()+7*3600000).toISOString().slice(0,10);
+window.PM=(function(){
+  let api=null,docs=[];const $=id=>document.getElementById(id);
+  const names=()=>new Set(BUILTIN.map(x=>x[1]).concat(docs.filter(d=>d.type!=='edit').map(d=>d.name)));
+  function field(f){
+    const id='pmf_'+f.k,help=f.h?'<small class="muted">'+pmEsc(f.h)+'</small>':'';
+    let inp;
+    if(f.t==='e')inp='<select id="'+id+'">'+f.o.map(o=>'<option value="'+pmEsc(o[0])+'">'+pmEsc(o[1])+'</option>').join('')+'</select>';
+    else if(f.t==='b')inp='<select id="'+id+'">'+PM_B.map(o=>'<option value="'+o[0]+'">'+o[1]+'</option>').join('')+'</select>';
+    else if(f.t==='a')inp='<div class="pmchk">'+f.o.map(o=>'<label><input type="checkbox" name="'+id+'" value="'+pmEsc(o[0])+'"> '+pmEsc(o[1])+'</label>').join(' ')+'</div>';
+    else if(f.t==='n')inp='<input id="'+id+'" type="number" inputmode="decimal" step="any">';
+    else inp='<input id="'+id+'" type="text" maxlength="120">';
+    return '<div class="pmrow"><label for="'+id+'">'+pmEsc(f.l)+(f.opt?' <span class="muted">(ไม่บังคับ)</span>':'')+'</label>'+inp+help+'</div>';
+  }
+  function renderFields(){
+    const cat=$('pmCat').value,fs=PM_F[cat];
+    let h=fs.map(field).join('');
+    if(cat==='nb')h+='<div class="pmrow"><label>เหมาะกับงาน (เลือกอย่างน้อย 1)</label><div class="pmchk">'+PM_PU.map(o=>'<label><input type="checkbox" name="pmf_pu" value="'+o[0]+'"> '+o[1]+'</label>').join(' ')+'</div></div>'
+      +'<div class="pmrow"><label for="pmf_pro">ข้อดี (ไม่บังคับ)</label><input id="pmf_pro" type="text" maxlength="200"></div><div class="pmrow"><label for="pmf_con">ข้อควรระวัง (ไม่บังคับ)</label><input id="pmf_con" type="text" maxlength="200"></div>';
+    $('pmFields').innerHTML=h;
+    $('pmCondRow').style.display=PM_USED.includes(cat)?'':'none';
+  }
+  function collect(){
+    const cat=$('pmCat').value,spec={};
+    PM_F[cat].forEach(f=>{
+      const id='pmf_'+f.k;
+      if(f.t==='a'){const v=[...document.querySelectorAll('input[name="'+id+'"]:checked')].map(x=>x.value);if(v.length||!f.opt)spec[f.k]=v;return}
+      const el=$(id);if(!el)return;let v=el.value;
+      if(f.t==='s'){spec[f.k]=v.trim();return}
+      if(v===''){spec[f.k]=undefined;return}
+      spec[f.k]=(f.t==='n'||f.t==='b'||f.num)?Number(v):v;
+    });
+    const o={type:'add',cat,name:$('pmName').value.trim(),price:Number($('pmPrice').value),spec};
+    if(PM_USED.includes(cat)&&$('pmCond').value==='u')o.cond='u';
+    const b=$('pmBrand').value.trim();if(b)o.b=b;
+    const shop=$('pmShop').value.trim(),url=$('pmUrl').value.trim();
+    if(shop)o.shop=shop;if(url)o.url=url;if(shop||url)o.priceDate=$('pmDate').value||pmToday();
+    if(cat==='nb'){const pu=[...document.querySelectorAll('input[name="pmf_pu"]:checked')].map(x=>x.value).join('');if(pu)o.pu=pu;
+      ['pro','con'].forEach(k=>{const v=$('pmf_'+k).value.trim();if(v)o[k]=v})}
+    return o;
+  }
+  function msg(id,html,bad){const el=$(id);el.className='pmmsg '+(bad?'bad':'good');el.innerHTML=html}
+  async function saveNew(){
+    const o=collect(),errs=pvCheck(o,names());
+    if(errs.length){msg('pmMsg','<b>ยังบันทึกไม่ได้ ตรวจสอบดังนี้</b><ul>'+errs.map(e=>'<li>'+pmEsc(e)+'</li>').join('')+'</ul>',true);return}
+    try{await api.save(pmId('p_',o.name),o);msg('pmMsg','บันทึกแล้ว: '+pmEsc(o.name)+' (ลูกค้าจะเห็นเมื่อเปิดหน้าเว็บใหม่ ภายในประมาณ 10 นาที)',false);$('pmName').value='';$('pmPrice').value='';renderFields()}
+    catch(e){msg('pmMsg','บันทึกไม่สำเร็จ ตรวจว่าวางกฎ firestore.rules ตัวใหม่ใน Firebase แล้ว',true)}
+  }
+  function fillBuiltin(){
+    const g={};BUILTIN.forEach(x=>{(g[x[0]]=g[x[0]]||[]).push(x)});
+    $('pmItem').innerHTML=Object.keys(PM_CATS).filter(c=>g[c]).map(c=>'<optgroup label="'+pmEsc(PM_CATS[c])+'">'+g[c].map(x=>'<option value="'+pmEsc(x[1])+'">'+pmEsc(x[1])+' — '+x[2].toLocaleString('th-TH')+' บาท</option>').join('')+'</optgroup>').join('');
+  }
+  async function saveEdit(){
+    const name=$('pmItem').value,hide=$('pmHide').checked,price=$('pmNewPrice').value;
+    const o={type:'edit',name};
+    if(hide)o.hide=true;
+    else{const n=Number(price);if(!(n>=300&&n<=500000)){msg('pmMsg2','ใส่ราคาใหม่เป็นตัวเลข 300 ถึง 500000 หรือติ๊ก "ซ่อนสินค้านี้"',true);return}o.price=n;
+      const shop=$('pmEShop').value.trim(),url=$('pmEUrl').value.trim();
+      if(shop&&/^https:\/\/\S+$/.test(url)){o.shop=shop;o.url=url}else if(shop||url){msg('pmMsg2','ถ้าจะระบุร้าน ต้องใส่ทั้งชื่อร้านและลิงก์ที่ขึ้นต้นด้วย https://',true);return}
+      o.priceDate=$('pmEDate').value||pmToday()}
+    try{await api.save(pmId('o_',name),o);msg('pmMsg2','บันทึกแล้ว: '+pmEsc(name),false);$('pmNewPrice').value='';$('pmHide').checked=false}
+    catch(e){msg('pmMsg2','บันทึกไม่สำเร็จ ตรวจว่าวางกฎ firestore.rules ตัวใหม่ใน Firebase แล้ว',true)}
+  }
+  function renderList(){
+    const box=$('pmList');if(!docs.length){box.innerHTML='<p class="muted">ยังไม่มีสินค้าที่เพิ่มหรือแก้ไว้</p>';return}
+    box.innerHTML=docs.slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),'th')).map(d=>{
+      const add=d.type!=='edit',t=add?'<span class="chip">เพิ่มใหม่ · '+pmEsc(PM_CATS[d.cat]||d.cat)+'</span>':(d.hide?'<span class="chip">ซ่อน</span>':'<span class="chip">แก้ราคา</span>');
+      const pr=d.hide?'':'<b>'+Number(d.price).toLocaleString('th-TH')+' บาท</b>'+(d.shop?' · ตรวจที่ '+pmEsc(d.shop)+' '+pmEsc(d.priceDate||''):'');
+      return '<div class="rec"><div class="rec-h"><strong>'+pmEsc(d.name)+'</strong>'+t+'</div><p class="muted">'+pr+'</p><div class="actions">'
+        +(add&&!d.hide?'<button data-pm-price="'+pmEsc(d.id)+'">✏️ แก้ราคา</button>':'')+'<button class="danger" data-pm-del="'+pmEsc(d.id)+'">'+(add?'🗑️ ลบ':'↩️ ยกเลิกการแก้')+'</button></div></div>'}).join('');
+  }
+  function tab(n){['pmAdd','pmEdit','pmListWrap'].forEach(x=>$(x).classList.toggle('hidden',x!==n));document.querySelectorAll('[data-pm-tab]').forEach(b=>b.classList.toggle('on',b.dataset.pmTab===n))}
+  return{
+    init(a){
+      if(api){api=a;return}api=a;
+      $('pmCat').innerHTML=Object.keys(PM_F).map(c=>'<option value="'+c+'">'+PM_CATS[c]+'</option>').join('');
+      $('pmCat').addEventListener('change',renderFields);renderFields();fillBuiltin();
+      $('pmDate').value=pmToday();$('pmEDate').value=pmToday();
+      $('pmSave').addEventListener('click',saveNew);$('pmESave').addEventListener('click',saveEdit);
+      document.querySelectorAll('[data-pm-tab]').forEach(b=>b.addEventListener('click',()=>tab(b.dataset.pmTab)));
+      $('pmList').addEventListener('click',async e=>{
+        const del=e.target.closest('[data-pm-del]'),pr=e.target.closest('[data-pm-price]');
+        if(del){const d=docs.find(x=>x.id===del.dataset.pmDel);if(!d||!confirm((d.type==='edit'?'ยกเลิกการแก้ไข ':'ลบสินค้า ')+d.name+' ?'))return;try{await api.remove(d.id)}catch(err){alert('ลบไม่สำเร็จ')}}
+        if(pr){const d=docs.find(x=>x.id===pr.dataset.pmPrice);if(!d)return;const v=Number(prompt('ราคาใหม่ของ '+d.name+' (บาท)',d.price));if(!(v>=300&&v<=500000))return;const c=Object.assign({},d);delete c.id;delete c.updated;c.price=v;c.priceDate=pmToday();try{await api.save(d.id,c)}catch(err){alert('บันทึกไม่สำเร็จ')}}
+      });
+      tab('pmAdd');
+    },
+    setList(l){docs=l||[];renderList()}
+  };
+})();
+
+</script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -201,6 +437,7 @@ if(!firebaseConfig||!firebaseConfig.projectId||/ใส่/.test(firebaseConfig.p
   $('inBtn').disabled=true;
 }else{
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+let unsubP=null;
 let DOCS=[],ready=false,unsub=null,unsubB=null,BLK=new Map(),STATS=new Map(),freshIds=new Set();const NOTI=new Map(),DN=new Map();
 
 function login(){
@@ -217,11 +454,14 @@ $('outBtn').addEventListener('click',()=>signOut(auth));
 onAuthStateChanged(auth,u=>{
   if(unsub){unsub();unsub=null}
   if(unsubB){unsubB();unsubB=null}
+  if(unsubP){unsubP();unsubP=null}
   ready=false;DOCS=[];BLK=new Map();
   $('loginBox').classList.toggle('hidden',!!u);
   $('dash').classList.toggle('hidden',!u);
   $('hdrTools').classList.toggle('hidden',!u);
   if(!u)return;
+  PM.init({save:(id,d)=>setDoc(doc(db,'products',id),Object.assign({},d,{updated:serverTimestamp()})),remove:id=>deleteDoc(doc(db,'products',id))});
+  unsubP=onSnapshot(collection(db,'products'),s=>PM.setList(s.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{});
   unsubB=onSnapshot(collection(db,'blocked'),s=>{BLK=new Map(s.docs.map(d=>[d.id,d.data()]));render()},()=>{});
   const q=query(collection(db,'builds'),orderBy('ts','desc'),limit(300));
   unsub=onSnapshot(q,snap=>{
