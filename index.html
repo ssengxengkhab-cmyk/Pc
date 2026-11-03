@@ -139,11 +139,26 @@ button.danger{background:rgba(251,113,133,.14);border-color:var(--danger);color:
 <p class="muted" id="formMsg" role="alert"></p>
 </section>
 
-
+<div class="tabs"><button class="active" data-tab="recommendation">🧩 แนะนำสเปก</button><button data-tab="catalog">🔎 ค้นหาสินค้า</button></div>
 
 <section id="recommendationSection"><div id="result"><div class="panel"><h2>เริ่มต้นจัดสเปกของคุณ</h2><p class="muted">กรอกข้อมูลด้านบนแล้วกดปุ่มแนะนำ ผลจะแสดงที่นี่</p></div></div></section>
 
-
+<section id="catalogSection" class="hidden">
+<div class="panel"><h2>ค้นหาสินค้าและราคา</h2>
+<div class="grid" style="margin-top:12px">
+<div><label for="fCat">หมวดสินค้า</label><select id="fCat"></select></div>
+<div><label for="fBrand">ยี่ห้อ</label><select id="fBrand"></select></div>
+<div><label for="fKey">ชื่อรุ่น</label><input id="fKey" type="text" placeholder="เช่น 5600, RTX, Vivobook"></div>
+<div><label for="fCond">สภาพ</label><select id="fCond"><option value="all">ทั้งหมด</option><option value="new">มือหนึ่ง</option><option value="used">มือสอง</option></select></div>
+<div><label for="fPur">การใช้งาน</label><select id="fPur"></select></div>
+<div><label for="fSort">เรียงราคา</label><select id="fSort"><option value="asc">ต่ำไปสูง</option><option value="desc">สูงไปต่ำ</option></select></div>
+<div><label for="fMin">ราคาต่ำสุด</label><input type="number" id="fMin" min="0" placeholder="0"></div>
+<div><label for="fMax">ราคาสูงสุด</label><input type="number" id="fMax" min="0" placeholder="ไม่จำกัด"></div>
+</div>
+<button class="primary" id="searchButton">ค้นหาสินค้า</button>
+<p class="muted" id="count"></p></div>
+<div id="productResults" class="products"></div>
+</section>
 
 </main>
 <div class="toast" id="toast" role="status" aria-live="polite"><b id="toastIc">🔔</b><span id="toastTx"></span></div>
@@ -573,6 +588,8 @@ function recNB(f){NBPICK=null;
 }
 
 /* ===== คอนโทรล ===== */
+function showTab(t){document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));['recommendation','catalog'].forEach(n=>$(n+'Section').classList.toggle('hidden',t!==n))}
+document.querySelector('.tabs').addEventListener('click',e=>{if(e.target.dataset.tab)showTab(e.target.dataset.tab)});
 $('themeButton').addEventListener('click',()=>document.body.classList.toggle('light'));
 let LASTCLICK=0;
 $('recommendButton').addEventListener('click',()=>{
@@ -585,7 +602,7 @@ $('recommendButton').addEventListener('click',()=>{
   CUR=null;NBPICK=null;
   const html=f.device==='laptop'?recNB(f):recDesktop(f);
   $('result').innerHTML=html;
-  $('result').scrollIntoView({behavior:'smooth'});
+  showTab('recommendation');$('result').scrollIntoView({behavior:'smooth'});
   if(f.device==='desktop'&&CUR){const a=coolAdvice(CUR.parts),tot=sumP(CUR.parts);saveBuild();
     announce(a.ic,'จัดสเปกเสร็จแล้ว ราคารวม '+baht(tot)+' · ต้องใช้ '+a.title+'','จัดสเปกเสร็จแล้ว ราคารวม '+Math.round(tot)+' บาท '+a.speech)}
   else if(f.device==='laptop'&&NBPICK){saveNB(f);announce('💻','จัดโน้ตบุ๊กให้เสร็จแล้ว','จัดโน้ตบุ๊กให้เสร็จแล้ว')}
@@ -624,10 +641,31 @@ function updBuild(){if(!CUR||!CUR.rid)return;CUR.rev=(CUR.rev||0)+1;LAST.rev=CUR
 $('level').addEventListener('change',fillYears);
 
 /* ===== ค้นหาสินค้า ===== */
+$('fCat').innerHTML='<option value="all">ทุกหมวด</option>'+Object.keys(CAT).map(k=>'<option value="'+k+'">'+CAT[k]+'</option>').join('');
+$('fPur').innerHTML='<option value="all">ทุกการใช้งาน</option>'+Object.keys(PUR).map(k=>'<option value="'+PUR[k][1]+'">'+PUR[k][0]+'</option>').join('');
+function brands(){const c=$('fCat').value,s=[...new Set(DB.filter(x=>c==='all'||x.cat===c).map(x=>x.b))].sort();$('fBrand').innerHTML='<option value="all">ทุกยี่ห้อ</option>'+s.map(b=>'<option>'+esc(b)+'</option>').join('')}
+function specText(x){const s=x.spec;switch(x.cat){
+  case'cpu':return s.s+' · ~'+s.w+'W · '+(s.ig?'มีกราฟิกในตัว':'ไม่มีกราฟิกในตัว')+(s.bx?' · แถมพัดลม':' · ไม่แถมพัดลม')+' · ต้องใช้ '+CT[s.ct].n;
+  case'mb':return s.s+' · '+s.m+' · '+s.f;case'ram':return s.m+' '+s.gb+'GB';
+  case'gpu':return s.none?'ใช้กราฟิกในซีพียู':'~'+s.w+'W · ยาว '+s.l+'mm';
+  case'ssd':return s.t+' '+s.gb+'GB';case'psu':return s.w+'W';
+  case'cs':return 'รองรับ '+s.f.join('/')+' · การ์ดจอยาวสุด '+s.l+'mm · หม้อน้ำ '+s.r+'mm';
+  case'cl':return 'รับความร้อน ~'+s.cw+'W'+(s.r?' · หม้อน้ำ '+s.r+'mm':'');
+  case'pc':return s.txt;case'nb':return s.cpu+' · '+s.gpu+' ('+s.gt+') · RAM '+s.ram+'GB · '+s.ssd+' · '+s.scr}return''}
+function search(){
+  const c=$('fCat').value,b=$('fBrand').value,k=$('fKey').value.trim().toLowerCase(),cd=$('fCond').value,pu=$('fPur').value,mn=Number($('fMin').value)||0,mx=Number($('fMax').value)||Infinity;
+  const r=DB.filter(x=>(c==='all'||x.cat===c)&&(b==='all'||x.b===b)&&(!k||x.name.toLowerCase().includes(k))&&(cd==='all'||(cd==='used')===(x.cond==='u'))&&(pu==='all'||x.pu.includes(pu))&&x.price>=mn&&x.price<=mx&&!x.spec.none).sort((a,b)=>$('fSort').value==='asc'?a.price-b.price:b.price-a.price);
+  $('count').textContent='พบ '+r.length+' รายการในฐานข้อมูลปัจจุบัน';
+  $('productResults').innerHTML=r.length?r.map(x=>'<div class="product"><h3>'+ICN[x.cat]+' '+esc(x.name)+'</h3><p class="muted">'+esc(CAT[x.cat])+' · '+(x.cond==='u'?'มือสอง':'มือหนึ่ง')+' · '+esc(specText(x))+'</p><p class="price">'+baht(x.price)+'</p>'+srcHTML(x)+(x.n?'<small>'+esc(x.n)+'</small>':'')+'</div>').join(''):'<div class="panel">ไม่พบสินค้าตรงเงื่อนไขในฐานข้อมูลปัจจุบัน ลองปรับตัวกรอง</div>';
+}
+$('fCat').addEventListener('change',()=>{brands();search()});
+['fBrand','fCond','fPur','fSort'].forEach(i=>$(i).addEventListener('change',search));
+['fKey','fMin','fMax'].forEach(i=>$(i).addEventListener('input',search));
+$('searchButton').addEventListener('click',search);
 const nV=DB.filter(x=>x.src).length;
 $('dbInfo').textContent='ฐานข้อมูลมี '+DB.length+' รายการ (ตรวจราคาที่ร้านแล้ว '+nV+' รายการ ที่เหลือเป็นราคาประมาณ) ยังไม่ครอบคลุมฮาร์ดแวร์ทุกรุ่น ไม่มี DDR2/DDR3 จอภาพ หรืออุปกรณ์ต่อพ่วง โน้ตบุ๊กมีหลายช่วงราคาแต่รุ่นที่ไม่มีป้าย "ตรวจที่ร้าน" เป็นราคาประมาณ ควรเช็กรุ่นย่อยและราคาที่ร้านก่อนซื้อ';
 $('storeLinks').innerHTML='ตรวจราคาที่ร้าน: '+STORES.map(s=>'<a href="'+s[1]+'" target="_blank" rel="noopener">'+s[0]+'</a>').join(' · ');
-
+brands();search();
 fillYears();
 if(typeof window!=='undefined')window.PCB={DB,cands,pickBest,check,decent,recDesktop,recNB,sumP,KEYS,coolAdvice,saveBuild,saveNB,nb:()=>NBPICK,setCur:f=>{CUR.f=f},cur:()=>CUR};
 </script>
