@@ -133,7 +133,6 @@ button.danger{background:rgba(251,113,133,.14);border-color:var(--danger);color:
 <div><label for="deviceType">ประเภทสินค้า</label><select id="deviceType"><option value="desktop">คอมพิวเตอร์ตั้งโต๊ะ (ประกอบเอง)</option><option value="laptop">โน้ตบุ๊ก</option></select></div>
 <div><label for="budget">งบประมาณ (บาท)</label><input id="budget" type="number" min="1000" step="500" value="25000"></div>
 <div><label for="purpose">วัตถุประสงค์</label><select id="purpose"><option value="gaming">เล่นเกม</option><option value="work">ทำงานทั่วไปและเรียน</option><option value="programming">เขียนโปรแกรม</option><option value="video">ตัดต่อวิดีโอและสร้างคอนเทนต์</option><option value="graphic3d">งานกราฟิกและ 3D</option><option value="general">ใช้งานทั่วไป</option></select></div>
-<div><label for="condition">สภาพสินค้า</label><select id="condition"><option value="new">มือหนึ่ง</option><option value="used">มือสอง</option><option value="either">ให้ระบบเลือกตามความคุ้มค่า</option></select></div>
 </div>
 <button class="primary big" id="recommendButton">✨ แนะนำคอมพิวเตอร์ให้ฉัน</button>
 <p class="muted" id="formMsg" role="alert"></p>
@@ -149,7 +148,6 @@ button.danger{background:rgba(251,113,133,.14);border-color:var(--danger);color:
 <div><label for="fCat">หมวดสินค้า</label><select id="fCat"></select></div>
 <div><label for="fBrand">ยี่ห้อ</label><select id="fBrand"></select></div>
 <div><label for="fKey">ชื่อรุ่น</label><input id="fKey" type="text" placeholder="เช่น 5600, RTX, Vivobook"></div>
-<div><label for="fCond">สภาพ</label><select id="fCond"><option value="all">ทั้งหมด</option><option value="new">มือหนึ่ง</option><option value="used">มือสอง</option></select></div>
 <div><label for="fPur">การใช้งาน</label><select id="fPur"></select></div>
 <div><label for="fSort">เรียงราคา</label><select id="fSort"><option value="asc">ต่ำไปสูง</option><option value="desc">สูงไปต่ำ</option></select></div>
 <div><label for="fMin">ราคาต่ำสุด</label><input type="number" id="fMin" min="0" placeholder="0"></div>
@@ -197,7 +195,6 @@ P('cpu','AMD Ryzen 9 9950X3D2',56000,{s:'AM5',gen:'am5',w:170,p:120,ig:1,bx:0,ct
 P('cpu','Intel Core i3-12100F',3400,{s:'LGA1700',gen:'i12',w:60,p:40,ig:0,bx:1,ct:0,bt:1});
 P('cpu','Intel Core i5-12400',6200,{s:'LGA1700',gen:'i12',w:90,p:52,ig:1,bx:1,ct:0,bt:1});
 P('cpu','Intel Core i5-14400F',9200,{s:'LGA1700',gen:'i14',w:120,p:65,ig:0,bx:1,ct:1,bt:2});
-P('cpu','AMD Ryzen 5 3600 (มือสอง)',2200,{s:'AM4',gen:'am4-3k',w:75,p:45,ig:0,bx:1,ct:0,bt:1},{cond:'u',b:'AMD',n:'มือสอง ต้องตรวจสภาพ/ประกันกับผู้ขาย'});
 P('mb','ASRock B450M',2700,{s:'AM4',m:'DDR4',f:'mATX',t:1,u:['am4-5k']});
 P('mb','MSI B550M',3800,{s:'AM4',m:'DDR4',f:'mATX',t:1});
 P('mb','Gigabyte B650M',5200,{s:'AM5',m:'DDR5',f:'mATX',t:2});
@@ -213,7 +210,6 @@ P('ram','DDR4 32GB 3200 (16GB x 2)',10500,{m:'DDR4',gb:32},{b:'DDR4'});
 P('ram','Kingston Fury Beast DDR5 5600 16GB (1x16)',9590,{m:'DDR5',gb:16},{b:'Kingston',src:S('66855/16GB--16GBx1--DDR5-5600MHz-RAM--หน่วยความจำ--KINGSTON-FURY-BEAST-DDR5--INTEL-XMP---BLACK---KF556C40BB-16-',null)});
 P('ram','DDR5 32GB 5600 (16GB x 2)',17900,{m:'DDR5',gb:32},{b:'DDR5'});
 P('ram','DDR5 64GB 5600 (32GB x 2)',37000,{m:'DDR5',gb:64},{b:'DDR5'});
-P('ram','DDR4 16GB 3200 (มือสอง)',3000,{m:'DDR4',gb:16},{cond:'u',b:'DDR4',n:'มือสอง ต้องตรวจสภาพ/ประกันกับผู้ขาย'});
 P('gpu','ไม่ใช้การ์ดจอแยก (กราฟิกในซีพียู)',0,{w:0,l:0,p:6,pc:0,none:1},{b:'-',pu:'wpn'});
 P('gpu','GeForce RTX 3050 6GB',7000,{w:130,l:200,p:28,pc:1},{b:'NVIDIA'});
 P('gpu','Radeon RX 7600 8GB',11000,{w:165,l:240,p:42,pc:1},{b:'AMD'});
@@ -223,9 +219,6 @@ P('gpu','Radeon RX 7800 XT 16GB',23500,{w:263,l:267,p:72,pc:2},{b:'AMD'});
 P('gpu','GeForce RTX 4070 SUPER 12GB',28000,{w:220,l:245,p:80,pc:2},{b:'NVIDIA'});
 P('gpu','GeForce RTX 5080 16GB',67000,{w:360,l:310,p:115,pc:3},{b:'NVIDIA'});
 P('gpu','GeForce RTX 5090 32GB',139000,{w:575,l:310,p:160,pc:3},{b:'NVIDIA'});
-P('gpu','GeForce GTX 1660 SUPER 6GB (มือสอง)',3500,{w:125,l:230,p:22,pc:1},{cond:'u',b:'NVIDIA',n:'มือสอง ระวังการ์ดจากงานขุดเหรียญ ตรวจสภาพก่อนรับ'});
-P('gpu','Radeon RX 580 8GB (มือสอง)',2200,{w:185,l:240,p:14,pc:1},{cond:'u',b:'AMD',pu:'wn',n:'มือสอง กินไฟสูงเทียบประสิทธิภาพ'});
-P('gpu','GeForce RTX 3060 12GB (มือสอง)',6500,{w:170,l:242,p:36,pc:1},{cond:'u',b:'NVIDIA',n:'มือสอง ต้องตรวจสภาพ/ประกันกับผู้ขาย'});
 P('ssd','NVMe SSD 500GB',3000,{gb:500,t:'NVMe'},{b:'NVMe'});
 P('ssd','Kingston NV3 NVMe SSD 1TB',5190,{gb:1000,t:'NVMe'},{b:'Kingston',src:S('70439/60/1-TB-SSD--เอสเอสดี--KINGSTON-NV3---PCIe-4x4-NVMe-M-2-2280--SNV3S-1000G-','2026-09-21')});
 P('ssd','NVMe SSD 2TB',10500,{gb:2000,t:'NVMe'},{b:'NVMe'});
@@ -266,19 +259,14 @@ P('nb','MSI Titan 18 HX (Core Ultra 9 / RTX 5090 / 64GB / 4TB)',239990,{cpu:'Int
 P('cpu','Intel Core i3-12100 (มีกราฟิกในตัว)',4000,{s:'LGA1700',gen:'i12',w:60,p:40,ig:1,bx:1,ct:0,bt:1},{lo:1});
 P('cpu','Intel Pentium Gold G7400',2800,{s:'LGA1700',gen:'i12',w:46,p:24,ig:1,bx:1,ct:0,bt:1},{pu:'wn',lo:1,n:'ซีพียู 2 คอร์ เหมาะงานเอกสารและเว็บเบา ๆ เท่านั้น'});
 P('ram','DDR4 8GB 3200 (8GB x 1)',2200,{m:'DDR4',gb:8},{b:'DDR4',lo:1});
-P('ram','DDR4 8GB (มือสอง)',1500,{m:'DDR4',gb:8},{cond:'u',b:'DDR4',lo:1,n:'มือสอง ต้องตรวจสภาพ/ประกันกับผู้ขาย'});
 P('ssd','NVMe SSD 256GB',1500,{gb:256,t:'NVMe'},{b:'NVMe',lo:1});
 P('psu','PSU 350W',900,{w:350,pc:0},{b:'PSU',lo:1});
-P('nb','Lenovo ThinkPad T480 (Core i5 / 8GB / 256GB) มือสอง',6900,{cpu:'Intel Core i5 รุ่นที่ 8',gpu:'กราฟิกในตัว',gt:'ในตัว',ram:8,ssd:'256GB',scr:'14 นิ้ว FHD',p:18},{cond:'u',b:'Lenovo',pu:'wpn',pro:'ราคาถูก ทนทาน คีย์บอร์ดดี เหมาะเรียนและพิมพ์งาน',con:'มือสอง ต้องตรวจแบตเตอรี่ สภาพจอ และประกันกับผู้ขาย ไม่เหมาะเกมหรือตัดต่อ'});
-P('nb','Acer Nitro 5 (Core i5 / GTX 1650 / 8GB / 512GB) มือสอง',12900,{cpu:'Intel Core i5 ซีรีส์ H',gpu:'GTX 1650 4GB',gt:'แยก',ram:8,ssd:'512GB',scr:'15.6 นิ้ว FHD',p:30},{cond:'u',b:'Acer',pu:'gpvwn',pro:'มีการ์ดจอแยก เล่นเกมเบาถึงปานกลางและตัดต่อเบา ๆ ได้ในราคาประหยัด',con:'มือสอง ต้องตรวจความร้อน แบตเตอรี่ และประกัน การ์ดจอเก่าไม่เหมาะงาน 3D หนัก ๆ'});
-P('nb','ASUS TUF Gaming F15 (Core i5 / RTX 3050 / 16GB / 512GB) มือสอง',17900,{cpu:'Intel Core i5 ซีรีส์ H',gpu:'RTX 3050 4GB',gt:'แยก',ram:16,ssd:'512GB',scr:'15.6 นิ้ว FHD 144Hz',p:38},{cond:'u',b:'ASUS',pu:'gpvxwn',pro:'การ์ดจอ RTX รองรับเกมและงานกราฟิกพื้นฐาน แรม 16GB',con:'มือสอง ต้องตรวจสภาพและประกัน การ์ดจอ 4GB จำกัดงาน 3D ใหญ่ ๆ'});
 
 /* ===== เพิ่มรุ่นเพื่อให้ครอบคลุมทุกช่วงราคา (ราคาเป็นราคาประมาณ ยังไม่ได้ตรวจกับร้าน ต้องเช็กราคาที่ร้านก่อนซื้อ) ===== */
 /* ซีพียู */
 P('cpu','AMD Ryzen 5 5500',3300,{s:'AM4',gen:'am4-5k',w:75,p:50,ig:0,bx:1,ct:0,bt:1});
 P('cpu','AMD Ryzen 7 5700X',5900,{s:'AM4',gen:'am4-5k',w:90,p:62,ig:0,bx:0,ct:1,bt:1});
 P('cpu','AMD Ryzen 7 5700X3D',7900,{s:'AM4',gen:'am4-5k',w:90,p:68,ig:0,bx:0,ct:1,bt:1});
-P('cpu','AMD Ryzen 5 5600X (มือสอง)',3500,{s:'AM4',gen:'am4-5k',w:90,p:58,ig:0,bx:1,ct:0,bt:1},{cond:'u',n:'มือสอง ต้องตรวจสภาพ/ประกันกับผู้ขาย'});
 P('cpu','AMD Ryzen 5 9600X',8900,{s:'AM5',gen:'am5',w:90,p:76,ig:1,bx:0,ct:1,bt:2});
 P('cpu','AMD Ryzen 7 9700X',12900,{s:'AM5',gen:'am5',w:90,p:84,ig:1,bx:0,ct:1,bt:2});
 P('cpu','AMD Ryzen 7 7800X3D',16500,{s:'AM5',gen:'am5',w:120,p:92,ig:1,bx:0,ct:2,bt:2});
@@ -305,9 +293,6 @@ P('gpu','GeForce RTX 5070 12GB',21900,{w:250,l:270,p:75,pc:2});
 P('gpu','Radeon RX 9070 16GB',24500,{w:220,l:300,p:85,pc:2});
 P('gpu','Radeon RX 9070 XT 16GB',27500,{w:300,l:320,p:95,pc:2});
 P('gpu','GeForce RTX 5070 Ti 16GB',36500,{w:300,l:300,p:97,pc:3});
-P('gpu','GeForce RTX 3060 Ti 8GB (มือสอง)',8500,{w:200,l:242,p:46,pc:1},{cond:'u',n:'มือสอง ต้องตรวจสภาพ/ประกันกับผู้ขาย'});
-P('gpu','GeForce RTX 3070 8GB (มือสอง)',9500,{w:220,l:260,p:52,pc:2},{cond:'u',n:'มือสอง ต้องตรวจสภาพ/ประกันกับผู้ขาย'});
-P('gpu','GeForce RTX 3080 10GB (มือสอง)',14000,{w:320,l:285,p:62,pc:2},{cond:'u',n:'มือสอง ต้องตรวจสภาพ/ประกันกับผู้ขาย'});
 /* PSU */
 P('psu','PSU 1000W',5200,{w:1000,pc:3},{b:'PSU'});
 /* เคส */
@@ -354,10 +339,10 @@ const BAL=1.6; /* การ์ดจอไม่ควรแรงเกิน ~
 function scoreOf(b,pur){const w=WT[pur];return w[0]*b.cpu.spec.p+w[1]*b.gpu.spec.p+w[2]*ramS(b.ram.spec.gb)+w[3]*ssdS(b.ssd.spec.gb)}
 function decent(b,pur){const c=b.cpu.spec.p,g=b.gpu.spec.p;return pur==='gaming'?g>=22:pur==='graphic3d'?g>=36:c>=(pur==='work'||pur==='general'?40:50)}
 /* ===== ตรวจรายการสินค้าที่เพิ่มเองใน products.jsonl (1 บรรทัด = 1 สินค้า) ===== */
-const PV_SOCKETS=['AM4','AM5','LGA1700'],PV_GENS=['am4-3k','am4-5k','am5','i12','i14'],PV_MEM=['DDR4','DDR5'],PV_FORMS=['mATX','ATX'],PV_PU='gwpvxn';
+const PV_SOCKETS=['AM5','AM4','AM3+','FM2+','LGA1851','LGA1700','LGA1200','LGA1151','LGA1150','LGA1155'],PV_GENS=['am5','am5-9k','am4-5k','am4-3k','am4-1k','am3p','fm2p','u2','i14','i12','i11','i10','i8','i6','i4','i2'],PV_MEM=['DDR5','DDR4','DDR3'],PV_FORMS=['mATX','ATX'],PV_PU='gwpvxn';
 const PV_SPEC={
   cpu:{s:['e',PV_SOCKETS],gen:['e',PV_GENS],w:['n',10,400],p:['n',1,300],ig:['b'],bx:['b'],ct:['i',0,3],bt:['i',1,3]},
-  mb:{s:['e',PV_SOCKETS],m:['e',PV_MEM],f:['e',PV_FORMS],t:['i',1,3],u:['a',PV_GENS,'opt']},
+  mb:{s:['e',PV_SOCKETS],m:['e',PV_MEM],f:['e',PV_FORMS],t:['i',1,3],u:['a',PV_GENS,'opt'],g:['a',PV_GENS,'opt']},
   ram:{m:['e',PV_MEM],gb:['n',4,256]},
   gpu:{w:['n',0,700],l:['n',0,450],p:['n',1,400],pc:['i',0,3]},
   ssd:{gb:['n',120,16000],t:['e',['NVMe','HDD']]},
@@ -374,7 +359,7 @@ function pvCheck(o,names){
   if(typeof o.name!=='string'||o.name.trim().length<3||o.name.length>160)e.push('name ต้องเป็นข้อความยาว 3-160 ตัวอักษร');
   else if(names&&names.has(o.name))e.push('ชื่อ "'+o.name+'" มีอยู่แล้ว');
   if(!isN(o.price)||o.price<300||o.price>500000)e.push('price ต้องเป็นตัวเลข 300-500000');
-  if(o.cond!==undefined&&o.cond!=='new'&&!(o.cond==='u'&&['cpu','ram','gpu','nb'].includes(o.cat)))e.push('cond ต้องเป็น "new" (หรือ "u" เฉพาะ cpu, ram, gpu, nb)');
+  if(o.cond!==undefined&&o.cond!=='new')e.push('ระบบรับเฉพาะสินค้ามือหนึ่ง');
   if(o.pu!==undefined&&!(typeof o.pu==='string'&&o.pu.length&&[...o.pu].every(c=>PV_PU.includes(c))))e.push('pu ต้องเป็นตัวอักษรจาก g w p v x n เท่านั้น');
   if(o.cat==='nb'&&o.pu===undefined)e.push('โน้ตบุ๊กต้องมี pu (ใช้กับงานอะไร เช่น "wpn")');
   if(o.url!==undefined&&!(typeof o.url==='string'&&/^https:\/\/\S+$/.test(o.url)))e.push('url ต้องขึ้นต้นด้วย https://');
@@ -408,7 +393,6 @@ function applyAddons(list){
     if(pvCheck(o,names).length)return;
     names.add(o.name);
     const ex={b:o.b?String(o.b).slice(0,40):o.name.split(' ')[0]};
-    if(o.cond==='u')ex.cond='u';
     if(o.pu)ex.pu=o.pu;
     ['n','pro','con'].forEach(k=>{if(o[k])ex[k]=String(o[k]).slice(0,200)});
     P(o.cat,o.name,Math.round(o.price),o.spec,ex);
@@ -436,7 +420,7 @@ function cands(cond,pur){
   const key=(LOW?'L':'')+cond+pur;if(CC[key])return CC[key];
   const out=[],cpus=pool('cpu',cond),mbs=pool('mb',cond),rams=pool('ram',cond),gpus=pool('gpu',cond),
     ssds=pool('ssd',cond).filter(x=>x.spec.t==='NVMe'),psus=pool('psu',cond).sort((a,b)=>a.price-b.price),css=pool('cs',cond),cls=pool('cl',cond);
-  for(const c of cpus)for(const m of mbs){if(m.spec.s!==c.spec.s||m.spec.t<c.spec.bt)continue;
+  for(const c of cpus)for(const m of mbs){if(m.spec.s!==c.spec.s||m.spec.t<c.spec.bt||(m.spec.g&&!m.spec.g.includes(c.spec.gen)))continue;
     for(const r of rams){if(r.spec.m!==m.spec.m)continue;
       for(const g of gpus){if(g.spec.none&&(!c.spec.ig||needGpu(pur)))continue;
         if(!g.spec.none&&g.spec.p>c.spec.p*BAL)continue;
@@ -461,6 +445,7 @@ function check(b){
   else if(c.spec.s===m.spec.s)add('ซีพียูกับเมนบอร์ด','ok','ซ็อกเก็ต '+c.spec.s+' ตรงกัน');
   else add('ซีพียูกับเมนบอร์ด','bad','ซีพียู '+c.spec.s+' แต่เมนบอร์ด '+m.spec.s+' ใส่กันไม่ได้');
   if(c&&m&&c.spec.s===m.spec.s){
+    if(m.spec.g&&!m.spec.g.includes(c.spec.gen))add('ตระกูลซีพียู','bad','เมนบอร์ดรุ่นนี้ไม่รองรับซีพียูตระกูลนี้ ('+c.spec.gen+') ใส่แล้วใช้งานไม่ได้');
     if(m.spec.t<c.spec.bt)add('ภาคจ่ายไฟเมนบอร์ด','warn','เมนบอร์ดรุ่นนี้เป็นระดับเริ่มต้น อาจจ่ายไฟให้ซีพียูแรงอย่าง '+c.name+' ได้ไม่เต็มที่ ควรเลือกเมนบอร์ดระดับสูงขึ้น');
     if(m.spec.u&&m.spec.u.includes(c.spec.gen))add('ชิปเซตและ BIOS','warn','เมนบอร์ดรุ่นนี้อาจต้องอัปเดต BIOS ก่อนใช้กับซีพียูรุ่นนี้ ให้ร้านอัปเดตให้ก่อนรับสินค้า');else add('ชิปเซตและ BIOS','ok','ไม่มีข้อกำหนดอัปเดต BIOS ในข้อมูลที่มี (ควรเช็กรายการรองรับของผู้ผลิตอีกครั้ง)')}
   if(!r||!m)add('RAM กับเมนบอร์ด','warn','ยังไม่ได้เลือก RAM หรือเมนบอร์ด');
@@ -559,7 +544,7 @@ function recDesktopCore(f){
   const head=sumHead(f,'🖥️ คอมพิวเตอร์ตั้งโต๊ะ');
   if(!pc){
     const any=cheapest(cands('new',f.pur).concat(cands('used',f.pur))),mixed=any&&['cpu','ram','gpu'].some(k=>any.parts[k].cond==='u');
-    return head+'<div class="panel"><h2 class="error">งบ '+baht(f.budget)+' ต่ำเกินกว่าจะจัดคอมตั้งโต๊ะได้</h2>'+(any?'<p>ชุดที่ถูกที่สุดเท่าที่จัดได้สำหรับงานนี้ราคา '+baht(any.total)+(mixed?' (ต้องจัดแบบมือสองผสม)':'')+' ต้องเพิ่มงบอีกอย่างน้อย '+baht(any.total-f.budget)+' หรือลองเลือกโน้ตบุ๊กซึ่งมีรุ่นมือสองราคาเริ่มต้นถูกกว่า</p>':'<p>ไม่พบชุดที่ตรงเงื่อนไขในฐานข้อมูลปัจจุบัน ลองเปลี่ยนวัตถุประสงค์หรือสภาพสินค้า</p>')+'</div>';
+    return head+'<div class="panel"><h2 class="error">งบ '+baht(f.budget)+' ต่ำเกินกว่าจะจัดคอมตั้งโต๊ะได้</h2>'+(any?'<p>ชุดที่ถูกที่สุดเท่าที่จัดได้สำหรับงานนี้ราคา '+baht(any.total)+(mixed?' (ต้องจัดแบบมือสองผสม)':'')+' ต้องเพิ่มงบอีกอย่างน้อย '+baht(any.total-f.budget)+' หรือลองเลือกโน้ตบุ๊กซึ่งราคาเริ่มต้นถูกกว่า</p>':'<p>ไม่พบชุดที่ตรงเงื่อนไขในฐานข้อมูลปัจจุบัน ลองเปลี่ยนวัตถุประสงค์หรือสภาพสินค้า</p>')+'</div>';
   }
   CUR={parts:Object.assign({},pc.parts),f,list};
   const left=f.budget-pc.total,econ=pickBest(list,f.budget*.8),high=pickBest(list,f.budget*1.15),alts=[];
@@ -598,7 +583,7 @@ $('recommendButton').addEventListener('click',()=>{
   if(!nm||!dp){$('formMsg').textContent='กรุณากรอกชื่อและแผนกวิชาให้ครบ';(nm?$('dept'):$('customerName')).focus();return}
   if(!(budget>=1000)){$('formMsg').textContent='กรุณากรอกงบประมาณอย่างน้อย 1,000 บาท';return}
   $('formMsg').textContent='';
-  const f={name:nm,lv:$('level').value,yr:Number($('year').value)||1,dept:dp,device:$('deviceType').value,budget,pur:$('purpose').value,cond:$('condition').value};
+  const f={name:nm,lv:$('level').value,yr:Number($('year').value)||1,dept:dp,device:$('deviceType').value,budget,pur:$('purpose').value,cond:'new'};
   CUR=null;NBPICK=null;
   const html=f.device==='laptop'?recNB(f):recDesktop(f);
   $('result').innerHTML=html;
@@ -653,13 +638,13 @@ function specText(x){const s=x.spec;switch(x.cat){
   case'cl':return 'รับความร้อน ~'+s.cw+'W'+(s.r?' · หม้อน้ำ '+s.r+'mm':'');
   case'pc':return s.txt;case'nb':return s.cpu+' · '+s.gpu+' ('+s.gt+') · RAM '+s.ram+'GB · '+s.ssd+' · '+s.scr}return''}
 function search(){
-  const c=$('fCat').value,b=$('fBrand').value,k=$('fKey').value.trim().toLowerCase(),cd=$('fCond').value,pu=$('fPur').value,mn=Number($('fMin').value)||0,mx=Number($('fMax').value)||Infinity;
-  const r=DB.filter(x=>(c==='all'||x.cat===c)&&(b==='all'||x.b===b)&&(!k||x.name.toLowerCase().includes(k))&&(cd==='all'||(cd==='used')===(x.cond==='u'))&&(pu==='all'||x.pu.includes(pu))&&x.price>=mn&&x.price<=mx&&!x.spec.none).sort((a,b)=>$('fSort').value==='asc'?a.price-b.price:b.price-a.price);
+  const c=$('fCat').value,b=$('fBrand').value,k=$('fKey').value.trim().toLowerCase(),pu=$('fPur').value,mn=Number($('fMin').value)||0,mx=Number($('fMax').value)||Infinity;
+  const r=DB.filter(x=>(c==='all'||x.cat===c)&&(b==='all'||x.b===b)&&(!k||x.name.toLowerCase().includes(k))&&(pu==='all'||x.pu.includes(pu))&&x.price>=mn&&x.price<=mx&&!x.spec.none).sort((a,b)=>$('fSort').value==='asc'?a.price-b.price:b.price-a.price);
   $('count').textContent='พบ '+r.length+' รายการในฐานข้อมูลปัจจุบัน';
   $('productResults').innerHTML=r.length?r.map(x=>'<div class="product"><h3>'+ICN[x.cat]+' '+esc(x.name)+'</h3><p class="muted">'+esc(CAT[x.cat])+' · '+(x.cond==='u'?'มือสอง':'มือหนึ่ง')+' · '+esc(specText(x))+'</p><p class="price">'+baht(x.price)+'</p>'+srcHTML(x)+(x.n?'<small>'+esc(x.n)+'</small>':'')+'</div>').join(''):'<div class="panel">ไม่พบสินค้าตรงเงื่อนไขในฐานข้อมูลปัจจุบัน ลองปรับตัวกรอง</div>';
 }
 $('fCat').addEventListener('change',()=>{brands();search()});
-['fBrand','fCond','fPur','fSort'].forEach(i=>$(i).addEventListener('change',search));
+['fBrand','fPur','fSort'].forEach(i=>$(i).addEventListener('change',search));
 ['fKey','fMin','fMax'].forEach(i=>$(i).addEventListener('input',search));
 $('searchButton').addEventListener('click',search);
 const nV=DB.filter(x=>x.src).length;
@@ -672,7 +657,7 @@ if(typeof window!=='undefined')window.PCB={DB,cands,pickBest,check,decent,recDes
 <script type="module">
 /* ส่งผลการจัดสเปกขึ้น Firestore (ฝั่งลูกค้าสร้างข้อมูลได้อย่างเดียว อ่านไม่ได้) */
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getFirestore,collection,addDoc,serverTimestamp,getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getFirestore,collection,addDoc,serverTimestamp,getDoc,doc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import * as CFG from "./firebase-config.js";
 const firebaseConfig=CFG.firebaseConfig,TG=CFG.telegramRelayUrl||'';
 /* ส่งแจ้งเตือนเข้า Telegram ผ่านตัวกลาง Google Apps Script (โทเคนบอทอยู่ที่ตัวกลาง ไม่อยู่ในหน้าเว็บ) ส่งเฉพาะฉบับแรก */
@@ -694,7 +679,7 @@ if(firebaseConfig&&firebaseConfig.projectId&&!/ใส่/.test(firebaseConfig.pr
   /* โหลดสินค้าที่แอดมินเพิ่ม/แก้ราคา (แคชไว้ 10 นาทีเพื่อลดจำนวนการอ่าน) */
   (async()=>{try{
     let list=null;try{const c=JSON.parse(sessionStorage.getItem('pcb_addons')||'null');if(c&&Date.now()-c.t<600000)list=c.list}catch(e){}
-    if(!list){const snap=await getDocs(collection(db,'products'));list=snap.docs.map(d=>d.data());try{sessionStorage.setItem('pcb_addons',JSON.stringify({t:Date.now(),list}))}catch(e){}}
+    if(!list){const snap=await getDoc(doc(db,'public','addons'));list=snap.exists()?(snap.data().items||[]):[];try{sessionStorage.setItem('pcb_addons',JSON.stringify({t:Date.now(),list}))}catch(e){}}
     if(window.PCB_ADDON)window.PCB_ADDON(list);
   }catch(e){}})();
   window.PCB_SEND=r=>{const d={did:String(DID).slice(0,40),dev:String(DEVSTR||'').slice(0,100),
