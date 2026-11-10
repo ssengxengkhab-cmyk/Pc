@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0a0e1a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PC Builder">
 <title>PC Builder TH | ระบบจัดสเปกคอมพิวเตอร์</title>
 <style>
 :root{
@@ -112,7 +118,7 @@ button.danger{background:rgba(251,113,133,.14);border-color:var(--danger);color:
 </head>
 <body>
 <header><div class="container row"><div class="logo"><i aria-hidden="true">🖥️</i>PC Builder <span>TH</span></div>
-<div class="hdr-actions"><button id="themeButton">☀️ / 🌙</button></div></div></header>
+<div class="hdr-actions"><button id="installBtn" style="display:none">📲 ติดตั้งแอป</button><button id="themeButton">☀️ / 🌙</button></div></div></header>
 <main class="container">
 <section class="hero"><h1>ประกอบคอมให้<em>เหมาะกับงบ</em>ของคุณ</h1><p class="muted">กรอกงบและงานที่ต้องการ ระบบจะจัดสเปกที่เข้ากันได้ภายในงบ แสดงราคารวม เงินที่เหลือ และบอกชัดว่าต้องใช้พัดลมหรือชุดน้ำ</p>
 <div class="chips"><span class="chip">✅ ตรวจความเข้ากันได้</span><span class="chip">❄️ แนะนำชุดระบายความร้อน</span></div></section>
@@ -653,6 +659,22 @@ $('storeLinks').innerHTML='ตรวจราคาที่ร้าน: '+STOR
 brands();search();
 fillYears();
 if(typeof window!=='undefined')window.PCB={DB,cands,pickBest,check,decent,recDesktop,recNB,sumP,KEYS,coolAdvice,saveBuild,saveNB,nb:()=>NBPICK,setCur:f=>{CUR.f=f},cur:()=>CUR};
+</script>
+<script>
+/* ติดตั้งเป็นแอป (PWA) + service worker */
+(function(){
+  const btn=document.getElementById('installBtn');
+  const standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+  let dp=null;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;if(!standalone)btn.style.display=''});
+  btn.addEventListener('click',async()=>{
+    if(dp){dp.prompt();try{await dp.userChoice}catch(e){}dp=null;btn.style.display='none';return}
+    alert('วิธีติดตั้งบน iPhone/iPad: แตะปุ่มแชร์ (สี่เหลี่ยมมีลูกศรชี้ขึ้น) ใน Safari แล้วเลือก "เพิ่มลงในหน้าจอโฮม"');
+  });
+  window.addEventListener('appinstalled',()=>{btn.style.display='none'});
+  if(/iphone|ipad|ipod/i.test(navigator.userAgent)&&!standalone)btn.style.display='';
+  if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js').catch(()=>{});
+})();
 </script>
 <script type="module">
 /* ส่งผลการจัดสเปกขึ้น Firestore (ฝั่งลูกค้าสร้างข้อมูลได้อย่างเดียว อ่านไม่ได้) */
